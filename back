@@ -1,0 +1,256 @@
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+<link rel="stylesheet" href="/game/style.css">
+<div class="container">
+    <header class="title">
+        <h2>JavaScript Snake Game</h2>
+        <h3 id="score">Score: </h3>
+    </header>
+</div>
+
+<div class="container">
+    <section class="overlay">
+        <div class="gameOverGrid">
+            <h3 id="gameOver">You lose!</h3>
+        </div>
+        <button class="gameOverGrid btn">Play</button>
+    </section>
+    <section id="gameBoard"></section>
+</div>
+
+<script>
+
+var gameBoardSize = 40;
+var gamePoints = 0;
+var gameSpeed = 100;
+
+$(document).ready(function () {
+    console.log("Ready Player One!");
+    createBoard();
+    $(".btn").click(function() {
+        startGame();
+    });
+});
+
+var Snake = {
+    position: [[20, 20], [20, 19], [20, 18]], // snake start position
+    size: 3,
+    direction: "r",
+    alive: true
+}
+
+var Food = {
+    position: [],
+    present: false
+}
+
+function createBoard() {
+    $("#gameBoard").empty();
+    var size = gameBoardSize;
+    
+    for (i = 0; i < size; i++) {
+        $("#gameBoard").append('<div class="row"></div>');
+        for (j = 0; j < size; j++) {
+            $(".row:last-child").append('<div class="pixel"></div>');
+        }
+    }
+}
+
+function moveSnake() {
+  // var x = direction['x'] - 320;
+  // var y = direction['y'] - 320;
+  // var length = sqrt((abs(x)^2) + (abs(y)^2));
+  // x = x / length;
+  // y = y /length;
+  // var head = Snake.position[0].slice();
+  head[1] += x;
+  //head[0] += y;
+
+  // switch (Snake.direction) {
+  //   case 'r':
+  //     head[1] += 1;
+  //     break;
+  //   case 'l':
+  //     head[1] -= 1;
+  //     break;
+  //   case 'u':
+  //     head[0] -= 1;
+  //     break;
+  //   case 'd':
+  //     head[0] += 1;
+  //     break;
+  // }
+
+  // check after head is moved
+  if (alive(head)) {
+    // draw head
+    $(".row:nth-child(" + head[0] + ") > .pixel:nth-child(" + head[1] + ")").addClass("snakePixel");
+
+    // draw rest of body loop
+    for (var i = 0; i < Snake.size; i++) {
+      $(".row:nth-child(" + Snake.position[i][0] + ") > .pixel:nth-child(" + Snake.position[i][1] + ")").addClass("snakePixel");
+    }
+
+    // if head touches food
+    if (head.every(function(e,i) {
+      return e === Food.position[i];
+    })) {
+      Snake.size++;
+      Food.present = false;
+      gamePoints += 5;
+      $(".row:nth-child(" + Food.position[0] + ") > .pixel:nth-child(" + Food.position[1] + ")").removeClass("foodPixel");
+      $("#score").html("Score: "+gamePoints)
+        if (gamePoints % 16 == 0 && gameSpeed > 10) { gameSpeed -= 5; };
+    } else {
+      $(".row:nth-child(" + Snake.position[Snake.size-1][0] + ") > .pixel:nth-child(" + Snake.position[Snake.size-1][1] + ")").removeClass("snakePixel");
+      Snake.position.pop();
+    }
+    Snake.position.unshift(head);
+  } else {
+    gameOver();
+  }
+}
+
+
+function generateFood() {
+    if (Food.present === false) {
+        Food.position = [Math.floor((Math.random()*40) + 1), Math.floor((Math.random()*40) + 1)]
+        Food.present = true;
+        console.log("Food at: "+Food.position);
+        $(".row:nth-child(" + Food.position[0] + ") > .pixel:nth-child(" + Food.position[1] + ")").addClass("foodPixel");
+    }
+}
+
+function gameLoop() {
+    setTimeout(function() {
+        generateFood();
+        moveSnake();
+        if (Snake.alive) {gameLoop(); }
+    }, gameSpeed);
+}
+
+function alive(head) {
+  // head check
+  if (head[0] < 1 || head[0] > 40 || head[1] < 1 || head[1] > 40) {
+    return false;
+  }
+  // wall collision
+  if (Snake.position[0][0] < 1 || Snake.position[0][0] > 40 || Snake.position[0][1] < 1 || Snake.position[0][1] > 40) {
+    return false;
+  }
+  // self collision
+  for (var i = 1; i < Snake.size; i++) {
+    if ((Snake.position[0]).every(function(element,index) {
+      return element === Snake.position[i][index];
+    })) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function gameOver() {
+    Snake.alive = false;
+    console.log("Game Over!");
+    $(".overlay").show();
+    $("#gameOver").show();
+    var blink = function() {
+        $(".row:nth-child(" + Snake.position[0][0] + ") > .pixel:nth-child(" + Snake.position[0][1] + ")").toggleClass("snakePixel");
+    }
+    
+    var i = 0;
+    function blinkLoop() {
+        blink();
+        setTimeout(function() {
+            i++;
+            if (i < 10) { blinkLoop();}
+        }, 400);
+    }
+    blinkLoop();
+}
+
+function startGame() {
+    // reset game settings
+    Snake.size = 3;
+    Snake.position = [[20,20],[20,19],[20,18]];
+    Snake.direction = "r";
+    Snake.alive = true;
+    gameSpeed = 100;
+    gamePoints = 0;
+    Food.present = false;
+    
+    // start game
+    createBoard();
+    $(".overlay").hide();
+    gameLoop();
+}
+
+
+function keyPress() {
+
+    // var o_x = 320;
+    // var o_y = 320;
+    // var sin;
+    // if(x < 320 && y < 320) {
+    //   //fourth dim
+    //   if(Math.abs(x - o_x) > Math.abs(y - o_y) && Snake.direction != "l") {
+    //     Snake.direction = "r";
+    //   }
+    //   else if(Math.abs(x - o_x) < Math.abs(y - o_y) && Snake.direction != "u"){
+    //     Snake.direction = "d";
+    //   }
+    // }
+    // else if(x > 320 && y > 320) {
+    //   //third dim
+    //   if(Math.abs(x - o_x) > (y - o_y) && Snake.direction != "r") {
+    //     Snake.direction = "l";
+    //   }
+    //   else if(Math.abs(x - o_x) < (y - o_y) && Snake.direction != "u"){
+    //     Snake.direction = "d";
+    //   }
+    // }
+
+    // else if(x > 320 && y < 320) {
+    //   //second dim
+    //   if(Math.abs(x - o_x) > Math.abs(y - o_y) && Snake.direction != "r") {
+    //     Snake.direction = "l";
+    //   }
+    //   else if(Math.abs(x - o_x) < Math.abs(y - o_y) && Snake.direction != "d"){
+    //     Snake.direction = "u";
+    //   }
+    // }
+
+    // else if(x < 320 && y < 320) {
+    //   //first dim
+    //   if(Math.abs(x - o_x) > Math.abs(y - o_y) && Snake.direction != "l") {
+    //     Snake.direction = "r";
+    //   }
+    //   else if(Math.abs(x - o_x) < Math.abs(y - o_y) && Snake.direction != "d"){
+    //     Snake.direction = "u";
+    //   }
+    // }
+  
+    // $(document).one("keydown", function(key) {
+    //     switch(key.which) {
+    //         case 37: // left arrow
+    //             if (Snake.direction != "r") {Snake.direction = "l";}
+    //             break;
+    //         case 38: // up arrow
+    //             if (Snake.direction != "d") {Snake.direction = "u";}
+    //             break;
+    //         case 39: // right arrow
+    //             if (Snake.direction != "l") {Snake.direction = "r";}
+    //             break;
+    //         case 40: // down arrow
+    //             if (Snake.direction != "u") {Snake.direction = "d";}
+    //             break;
+    //     }
+    // });
+}
+</script>
+<script>
+  var direction;
+</script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/addons/p5.dom.min.js'></script>
+<script src='https://unpkg.com/ml5@0.1.1/dist/ml5.min.js'></script>
+<script src="/game/direction.js"></script>
