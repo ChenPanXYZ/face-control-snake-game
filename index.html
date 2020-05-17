@@ -6,38 +6,28 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/addons/p5.dom.min.js'></script>
     <script src='https://unpkg.com/ml5@0.1.1/dist/ml5.min.js'></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <link rel="stylesheet" href="style.css" defer>
-    <script type="text/javascript" src="game.js" async></script>
 </head>
 
 <body>
     
     <header class = "align-center">
         <h1>Snake</h1>
-        <p class="score">Score: <span id="score_value">0</span></p>
+        <p class="score">Score: <span id="score-value">0</span></p>
     </header>
 
     <div id = "game-body">
         <canvas id="game-box" class="align-center" width="320" height="320" tabindex="1"></canvas>
-        
-        <!-- Game Over Screen -->
-        <div id="gameover">
-            <h2>Game Over</h2>
-            <p>press <span style="background-color: #FFFFFF; color: #000000">space</span> to begin a</p>
-            <a id="newgame_gameover">new game</a>
-            <a id="setting_gameover">settings</a>
-        </div>
     
         <div id="menu">
-            <h2>Snake</h2>
-            <a id="start-button">Start</a>
-            <a id = "restart-button">Again</a>
+            <a id="loading">The AI module is on the way <br> 🏃 🏃 🏃 🏃 🏃</a>
+            <a id="start-button">Start 👍</a>
+            <a id="gameover">GAMEOVER 😢</a>
+            <a id = "restart-button">Try Again!</a>
         </div>
     </div>
 
 </body>
 
-<script>
-    //setup()
-</script>
+
+<script type="text/javascript" src="game.js"></script>
