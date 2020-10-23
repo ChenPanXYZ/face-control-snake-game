@@ -1,8 +1,10 @@
+  
 <!DOCTYPE HTML>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Face-Control Snake Game by Pan Chen</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/addons/p5.dom.min.js'></script>
     <script src='https://unpkg.com/ml5@0.1.1/dist/ml5.min.js'></script>
@@ -10,20 +12,26 @@
 </head>
 
 <body>
-    
-    <header class = "align-center">
-        <h1>Snake</h1>
-        <p class="score">Score: <span id="score-value">0</span></p>
-    </header>
+    <div class = "game">
+        <header class = "game-header align-center">
+            <h1>Snake</h1>
+        </header>
 
-    <div id = "game-body">
-        <canvas id="game-box" class="align-center" width="320" height="320" tabindex="1"></canvas>
-    
-        <div id="menu">
-            <a id="loading">The AI module is on the way <br> 🏃 🏃 🏃 🏃 🏃</a>
-            <a id="start-button">Start 👍</a>
-            <a id="gameover">GAMEOVER 😢</a>
-            <a id = "restart-button">Try Again!</a>
+        <div id = "game-body">
+            <canvas id="game-box" class="align-center" width="320" height="320" tabindex="1"></canvas>
+
+            <div id = "stat">
+                <p class="score">Score: <span id="score-value">0</span></p>
+                <p class="score">Highest Score: <span id="highest-score-value">...</span></p>
+                <p class="speed">Your Speed: <span id="speed-value">0 km/h</span></p>
+            </div>
+        
+            <div id="menu">
+                <a id="loading-reminder">The AI module is on the way <br> 🏃 🏃 🏃 🏃 🏃</a>
+                <a id="start-button">Start 👍</a>
+                <a id="gameover">GAMEOVER 😢</a>
+                <a id = "restart-button">Try Again!</a>
+            </div>
         </div>
     </div>
 

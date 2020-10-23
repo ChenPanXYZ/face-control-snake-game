@@ -1,35 +1,55 @@
 @import url("https://fonts.googleapis.com/css?family=VT323");
 
+body {
+    overflow: hidden;
+}
+@-webkit-keyframes logo-ani{
+    50%{-webkit-transform: scale(1.3,1.3);}
+   100%{-webkit-transform: scale(1.0,1.0);}
+ }
+
+ @keyframes logo-ani{
+    50%{transform: scale(1.3,1.3);}
+   100%{transform: scale(1.0,1.0);}
+ }
+
+#menu #start-button,
+#menu #restart-button,
+#speed-value{
+    -webkit-animation: logo-ani 1000ms linear infinite;
+            animation: logo-ani 1000ms linear infinite;
+}
+
+#start-button,
+#restart-button {
+    cursor: pointer;
+}
+
 ::selection {
-    color:#FFFFFF; 
     background:transparent;
 }
 
 ::-moz-selection {
-    color:#FFFFFF; 
     background:transparent;
 }
 
-*{
-    margin: 0;
-    padding: 0;
+.game{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
     font-family: "VT323";
 }
-body{
-    background-color: #fffffb;
-}
-.align-center {
-    margin-left: auto;
-    margin-right: auto;
-}
-header{
-    width: 340px;
+
+
+.game-header{
     font-size: 0;
 }
+
 canvas{
     display: block;
     border-style: solid;
-    border-width: 10px;
     border-color: #4D5139;
 }
 canvas:focus{
@@ -37,19 +57,18 @@ canvas:focus{
 }
 
 /* Top Styles */
-h1{
+.game h1{
     display: inline-block;
-    width: 100px;
-    font-size: 32px;
+    font-size: 40px;
     color: #4D5139;
+    font-family: "VT323" !important;
 }
 .score{
-    display: inline-block;
-    width: 240px;
+    display: block;
     font-size: 20px;
     color: #4D5139;
-    text-align: right;
 }
+
 .score-value{
     font-size: inherit;
 }
@@ -57,9 +76,6 @@ h1{
 /* Menu Screen Style */
 #menu{
     display: block;
-    width: 340px;
-    padding-top: 95px;
-    padding-bottom: 95px;
     font-size: 40px;
     margin-left: auto;
     margin-right: auto;
